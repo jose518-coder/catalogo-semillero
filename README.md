@@ -1,27 +1,27 @@
-# CatalogoSemillero
+# Catalogo de Productos Semillero WPOSS v1
+Taller 01 - Catálogo de productos con componentes
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+# Requisitos
+Angular 17
 
-## Development server
+# Taller 01
+el proyecto implementa:
+1. Componentes standalone
+2. @input()
+3. @output()
+4. Signals
+5. Computed
+6. Filtro por categoría
+7. Vista admin/customer
+8. funciones *ngIf / *ngFor / *ngSwitch
+9. trackBy
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+# Instalación
 
-## Code scaffolding
+Clonar el repositorio
+1. git clone URL_DEL_REPOSITORIO
+2. cd catalogo-semillero
+3. npm install
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Ejecutar el proyecto
+1. ng serve 
