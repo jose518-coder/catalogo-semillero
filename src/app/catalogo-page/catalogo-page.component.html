@@ -1,0 +1,49 @@
+<div class="resumen-carrito">
+  <p>Ítems: {{ cantidadCarrito() }}</p>
+  <p>Total: ${{ totalCarrito() }}</p>
+</div>
+
+<p>Rol actual: {{ rolActual() }}</p>
+
+<button (click)="cambiarRol()">
+  Cambiar a {{ rolActual() === 'admin' ? 'cliente' : 'administrador' }}
+</button>
+
+<label for="categoria">Categoría:</label>
+
+<select
+  id="categoria"
+  [value]="categoriaSeleccionada()"
+  (change)="categoriaSeleccionada.set($any($event.target).value)"
+>
+  <option value="todas">Todas</option>
+  <option value="Electrónica">Electrónica</option>
+  <option value="ropa">Ropa</option>
+  <option value="Electrodomestico">Electrodoméstico</option>
+</select>
+
+<div [ngSwitch]="rolActual()">
+
+  <div *ngSwitchCase="'admin'">
+
+    <app-tabla-productos
+      [productos]="productosFiltrados()"
+      (editar)="onEditar($event)"
+      (eliminar)="onEliminar($event)">
+    </app-tabla-productos>
+
+  </div>
+
+  <div *ngSwitchCase="'customer'">
+
+    <div class="catalogo">
+      <app-tarjeta-producto
+        *ngFor="let producto of productosFiltrados(); trackBy: trackById"
+        [producto]="producto"
+        (agregarAlCarrito)="onAgregarAlCarrito($event)">
+      </app-tarjeta-producto>
+    </div>
+
+  </div>
+
+</div>

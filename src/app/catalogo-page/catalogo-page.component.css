@@ -1,0 +1,10 @@
+.catalogo {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.resumen-carrito {
+  margin-bottom: 20px;
+}

@@ -1,27 +1,53 @@
-# CatalogoSemillero
+# Catálogo de Productos — Semillero WPOSS
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.3.17.
+Taller 01 — Catálogo de productos con componentes.
 
-## Development server
+Proyecto desarrollado como parte del Semillero WPOSS, utilizando Angular 17.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Requisitos
 
-## Code scaffolding
+- Node.js 20 LTS o superior
+- Angular CLI 17
+- npm
+- Git
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Descripción
 
-## Build
+Este proyecto implementa un catálogo de productos utilizando componentes standalone de Angular.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+La aplicación cuenta con dos vistas según el rol:
 
-## Running unit tests
+- **Customer:** muestra los productos mediante tarjetas.
+- **Admin:** muestra los productos mediante una tabla.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Los productos utilizados actualmente son datos simulados.
 
-## Running end-to-end tests
+## Conceptos implementados
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+1. Componentes standalone
+2. `@Input({ required: true })`
+3. `@Output()` y `EventEmitter`
+4. Signals
+5. `computed()`
+6. Filtro por categoría
+7. Vista Admin / Customer
+8. `*ngIf`
+9. `*ngFor`
+10. `*ngSwitch`
+11. `trackBy`
+12. Comunicación entre componentes padre e hijo
+13. Carrito de productos
 
-## Further help
+## Instalación
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+Clonar el repositorio:
+
+# Instalación
+
+Clonar el repositorio
+1. git clone URL_DEL_REPOSITORIO
+2. cd catalogo-semillero
+3. npm install
+
+Ejecutar el proyecto
+1. ng serve 
