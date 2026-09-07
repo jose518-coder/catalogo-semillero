@@ -4,7 +4,5 @@
   <p>Precio: ${{ producto.price }}</p>
   <p>Categoría: {{ producto.category.name }}</p>
   <span *ngIf="producto.stock === 0">Agotado</span>
-  <button (click)="agregar()">
-  Agregar al carrito
-  </button>
+  <button (click)="agregar()">Agregar al carrito</button>
 </div>
