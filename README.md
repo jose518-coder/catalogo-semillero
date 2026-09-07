@@ -1,8 +1,8 @@
 # Catálogo de Productos — Semillero WPOSS
 
-Taller 01 — Catálogo de productos con componentes.
+## Taller 02 — Conectar el catálogo a una API real
 
-Proyecto desarrollado como parte del Semillero WPOSS, utilizando Angular 17.
+Proyecto desarrollado como parte del Semillero WPOSS utilizando Angular 17.
 
 ## Requisitos
 
@@ -13,30 +13,19 @@ Proyecto desarrollado como parte del Semillero WPOSS, utilizando Angular 17.
 
 ## Descripción
 
-Este proyecto implementa un catálogo de productos utilizando componentes standalone de Angular.
+Este proyecto implementa un catálogo de productos utilizando componentes standalone de Angular 17.
+
+En este módulo, el catálogo se conecta a una API REST real para consultar y administrar productos y categorías.
 
 La aplicación cuenta con dos vistas según el rol:
 
-- **Customer:** muestra los productos mediante tarjetas.
-- **Admin:** muestra los productos mediante una tabla.
+- **Customer:** muestra los productos mediante tarjetas y permite agregarlos al carrito.
+- **Admin:** muestra los productos mediante una tabla y permite crear, editar y eliminar productos.
 
-Los productos utilizados actualmente son datos simulados.
+## API utilizada
 
-## Conceptos implementados
-
-1. Componentes standalone
-2. `@Input({ required: true })`
-3. `@Output()` y `EventEmitter`
-4. Signals
-5. `computed()`
-6. Filtro por categoría
-7. Vista Admin / Customer
-8. `*ngIf`
-9. `*ngFor`
-10. `*ngSwitch`
-11. `trackBy`
-12. Comunicación entre componentes padre e hijo
-13. Carrito de productos
+La aplicación utiliza la API de Platzi Fake Store:
+https://api.escuelajs.co/api/v1
 
 ## Instalación
 
