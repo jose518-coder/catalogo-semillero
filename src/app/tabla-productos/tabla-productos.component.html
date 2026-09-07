@@ -9,40 +9,20 @@
       <th>Acciones</th>
     </tr>
   </thead>
-
   <tbody>
     <tr *ngFor="let producto of productos; trackBy: trackById">
-
       <td>{{ producto.id }}</td>
-
       <td>
-        <img
-          [src]="producto.images[0]"
-          [alt]="producto.title"
-          width="60"
-        >
+        <img [src]="producto.images[0]" [alt]="producto.title" width="60">
       </td>
-
       <td>{{ producto.title }}</td>
-
       <td>{{ producto.category.name }}</td>
-
       <td>${{ producto.price }}</td>
-
       <td>
-        <button (click)="editar.emit(producto)">
-          Editar
-        </button>
-
-        <button (click)="eliminar.emit(producto)">
-          Eliminar
-        </button>
+        <button (click)="editar.emit(producto)">Editar</button>
+        <button (click)="eliminar.emit(producto)">Eliminar</button>
       </td>
-
     </tr>
   </tbody>
 </table>
-
-<p *ngIf="productos.length === 0">
-  No hay productos disponibles.
-</p>
+<p *ngIf="productos.length === 0">No hay productos disponibles.</p>

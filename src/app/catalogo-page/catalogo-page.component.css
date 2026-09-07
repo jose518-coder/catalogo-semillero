@@ -8,3 +8,12 @@
 .resumen-carrito {
   margin-bottom: 20px;
 }
+
+.error{
+  color: red;
+  font-weight: bold;
+}
+
+.mensaje {
+  font-weight: bold;
+}
