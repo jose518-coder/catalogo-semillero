@@ -1,8 +1,12 @@
 # Catálogo de Productos — Semillero WPOSS
 
-Taller 01 — Catálogo de productos con componentes.
+## Taller 03 — Routing, Guards y Lazy Loading
 
-Proyecto desarrollado como parte del Semillero WPOSS, utilizando Angular 17.
+Proyecto desarrollado como parte del Semillero WPOSS utilizando Angular 17.
+
+En este módulo se continúa el proyecto del Taller 02, incorporando navegación mediante Angular Router, rutas dinámicas, parámetros de consulta, lazy loading, autenticación simulada y guards.
+
+---
 
 ## Requisitos
 
@@ -11,36 +15,34 @@ Proyecto desarrollado como parte del Semillero WPOSS, utilizando Angular 17.
 - npm
 - Git
 
+---
+
 ## Descripción
 
-Este proyecto implementa un catálogo de productos utilizando componentes standalone de Angular.
+Este proyecto implementa un catálogo de productos conectado a una API REST.
 
-La aplicación cuenta con dos vistas según el rol:
+En este módulo se incorpora un sistema de navegación mediante rutas y diferentes mecanismos de protección y carga diferida.
 
-- **Customer:** muestra los productos mediante tarjetas.
-- **Admin:** muestra los productos mediante una tabla.
+La aplicación cuenta con:
 
-Los productos utilizados actualmente son datos simulados.
+- Catálogo de productos.
+- Detalle de producto.
+- Productos relacionados.
+- Carrito de compras.
+- Inicio de sesión simulado.
+- Panel de administración.
+- Protección de rutas mediante guards.
+- Lazy loading de componentes y rutas.
+- Filtros mediante query params.
+- Protección contra salida de formularios con cambios sin guardar.
+- Página para rutas inexistentes.
 
-## Conceptos implementados
+---
 
-1. Componentes standalone
-2. `@Input({ required: true })`
-3. `@Output()` y `EventEmitter`
-4. Signals
-5. `computed()`
-6. Filtro por categoría
-7. Vista Admin / Customer
-8. `*ngIf`
-9. `*ngFor`
-10. `*ngSwitch`
-11. `trackBy`
-12. Comunicación entre componentes padre e hijo
-13. Carrito de productos
+## API utilizada
 
-## Instalación
+La aplicación utiliza la API de Platzi Fake Store:
 
-Clonar el repositorio:
 
 # Instalación
 
