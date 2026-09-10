@@ -1,0 +1,9 @@
+<header>
+  <nav>
+    <a routerLink="/productos" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }"> Productos</a>
+    <a *ngIf="auth.estaAutenticado()" routerLink="/carrito" routerLinkActive="activo"> Carrito</a>
+    <a *ngIf="auth.tieneRol('admin')" routerLink="/admin" routerLinkActive="activo"> Administración</a>
+    <a *ngIf="!auth.estaAutenticado()" routerLink="/login" routerLinkActive="activo"> Iniciar sesión</a>
+    <button *ngIf="auth.estaAutenticado()" (click)="cerrarSesion()"> Cerrar sesión</button>
+  </nav>
+</header>

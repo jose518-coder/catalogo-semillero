@@ -1,0 +1,185 @@
+<h1>Administración de productos</h1>
+<hr>
+<button (click)="mostrarNuevo()">Nuevo producto</button>
+<hr>
+
+<p *ngIf="creacion$ | async as mensaje" class="mensaje"> {{ mensaje }}</p>
+<p *ngIf="actualizacion$ | async as mensaje" class="mensaje">{{ mensaje }}</p>
+<p *ngIf="eliminacion$ | async as mensaje"  class="mensaje">{{ mensaje }}</p>
+
+
+<div *ngIf="productoNuevo()" class="formulario-edicion">
+  <h2>Crear producto</h2>
+  <label for="tituloNuevo"> Título: </label>
+  <input
+    id="tituloNuevo"
+    type="text"
+    [value]="titulo()"
+    (input)="
+      titulo.set(
+        $any($event.target).value
+      );
+      marcarCambio()
+    "
+  >
+
+  <br><br>
+  <label for="precioNuevo"> Precio:</label>
+  <input
+    id="precioNuevo"
+    type="number"
+    [value]="precio()"
+    (input)="
+      precio.set(
+        +$any($event.target).value
+      );
+      marcarCambio()
+    "
+  >
+
+  <br><br>
+  <label for="descripcionNuevo"> Descripción:</label>
+  <textarea
+    id="descripcionNuevo"
+    [value]="descripcion()"
+    (input)="
+      descripcion.set(
+        $any($event.target).value
+      );
+      marcarCambio()
+    "
+  ></textarea>
+
+  <br><br>
+  <label for="imagenNuevo"> URL de imagen:</label>
+  <input
+    id="imagenNuevo"
+    type="text"
+    [value]="imagen()"
+    (input)="
+      imagen.set(
+        $any($event.target).value
+      );
+      marcarCambio()
+    "
+  >
+
+  <br><br>
+  <label for="categoriaNueva"> Categoría: </label>
+  <select
+    id="categoriaNueva"
+    [value]="categoria() ?? ''"
+    (change)="
+      categoria.set(
+        $any($event.target).value
+          ? +$any($event.target).value
+          : null
+      );
+      marcarCambio()
+    "
+  >
+
+    <option value=""> Seleccionar categoría</option>
+    <option *ngFor=" let categoriaItem of categorias$ | async " [value]="categoriaItem.id"> {{ categoriaItem.name }}</option>
+  </select>
+  <br><br>
+
+  <button (click)="crear()"> Crear producto</button>
+  <button (click)="cancelarNuevo()"> Cancelar</button>
+</div>
+
+<hr>
+
+<div *ngIf=" productoEditando() as producto " class="formulario-edicion">
+  <h2> Editar producto</h2>
+  <p> ID: {{ producto.id }}</p>
+  <label for="titulo"> Título:</label>
+  <input
+    id="titulo"
+    type="text"
+    [value]="titulo()"
+    (input)="
+      titulo.set(
+        $any($event.target).value
+      );
+      marcarCambio()
+    "
+  >
+
+  <br><br>
+  <label for="precio"> Precio: </label>
+  <input
+    id="precio"
+    type="number"
+    [value]="precio()"
+    (input)="
+      precio.set(
+        +$any($event.target).value
+      );
+      marcarCambio()
+    "
+  >
+
+  <br><br>
+  <label for="descripcion">Descripción:</label>
+  <textarea
+    id="descripcion"
+    [value]="descripcion()"
+    (input)="
+      descripcion.set(
+        $any($event.target).value
+      );
+      marcarCambio()
+    "
+  ></textarea>
+
+  <br><br>
+  <label for="imagen"> URL de imagen:</label>
+  <input
+    id="imagen"
+    type="text"
+    [value]="imagen()"
+    (input)="
+      imagen.set(
+        $any($event.target).value
+      );
+      marcarCambio()
+    "
+  >
+
+  <br><br>
+  <label for="categoria"> Categoría:</label>
+  <select
+    id="categoria"
+    [value]="categoria() ?? ''"
+    (change)="
+      categoria.set(
+        $any($event.target).value
+          ? +$any($event.target).value
+          : null
+      );
+      marcarCambio()
+    "
+  >
+    <option value=""> Seleccionar categoría</option>
+    <option *ngFor=" let categoriaItem of categorias$ | async " [value]="categoriaItem.id"> {{ categoriaItem.name }}</option>
+  </select>
+  <br><br>
+  <button (click)="guardar()"> Guardar cambios</button>
+  <button (click)="cancelarEdicion()"> Cancelar</button>
+</div>
+<hr>
+
+<h2> Productos </h2>
+<div *ngIf=" productos$ | async as productos " >
+  <p *ngIf=" productos.length === 0 " > No hay productos disponibles.</p>
+  <app-tabla-productos
+    *ngIf="
+      productos.length > 0
+    "
+    [productos]="productos"
+    (editar)="editar($event)"
+    (eliminar)="eliminar($event)"
+  >
+  </app-tabla-productos>
+</div>

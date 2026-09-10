@@ -1,79 +1,32 @@
+<h1>Catálogo de productos</h1>
 <div class="resumen-carrito">
-  <p>Ítems: {{ cantidadCarrito() }}</p>
-  <p>Total: ${{ totalCarrito() }}</p>
+  <p>Ítems en carrito:{{ cantidadCarrito() }}</p>
+  <p>Total:${{ totalCarrito() }}</p>
+  <a routerLink="/carrito">Ver carrito</a>
 </div>
-
-<p>Rol actual: {{ rolActual() }}</p>
-<button (click)="cambiarRol()"> Cambiar a {{rolActual()==='admin' ?'cliente':'administrador'}} </button>
 <hr>
-
-<button *ngIf="rolActual() === 'admin'" (click)="mostrarFormularioCrear()">Nuevo producto</button>
-<div *ngIf="productoNuevo()" class="formulario-edicion">
-  <h2>Crear producto</h2>
-  <label for="tituloNuevo">Título:</label>
-  <input id="tituloNuevo" type="text" [value]="tituloNuevo()" (input)="tituloNuevo.set($any($event.target).value)">
-  <br><br>
-  <label for="precioNuevo">Precio:</label>
-  <input id="precioNuevo" type="number" [value]="precioNuevo()"(input)="precioNuevo.set(+$any($event.target).value)">
-  <br><br>
-  <label for="descripcionNueva">Descripción:</label>
-  <textarea id="descripcionNueva" [value]="descripcionNueva()" (input)="descripcionNueva.set($any($event.target).value)"></textarea>
-  <br><br>
-  <label for="imagenNueva">URL de imagen:</label>
-  <input id="imagenNueva" type="text" [value]="imagenNueva()" (input)="imagenNueva.set($any($event.target).value)">
-  <br><br>
-  <label for="categoriaNueva">Categoría:</label>
-  <select id="categoriaNueva" [value]="categoriaNueva()" (change)="categoriaNueva.set($any($event.target).value ? +$any($event.target).value : null)">
-    <option value="">Seleccionar categoría</option>
-    <option *ngFor="let categoria of categorias$ | async"[value]="categoria.id">{{categoria.name}}</option>
-  </select>
-  <br><br>
-  <button (click)="crearProducto()">Crear producto</button>
-  <button (click)="cancelarCrear()">Cancelar</button>
-</div>
-
-<p *ngIf="creacion$ | async as mensaje" class="mensaje">{{mensaje}}</p>
 
 <label for="categoria">Categoría:</label>
-
-<select id="categoria" [value]="categoriaSeleccionada()" (change)="categoriaSeleccionada.set($any($event.target).value ? +$any($event.target).value : null)">
-  <option value="">Todas</option>
-  <option *ngFor="let categoria of categorias$ | async" [value]="categoria.id">{{categoria.name}}</option>
+<select id="categoria" [value]="categoriaSeleccionada() ?? ''" (change)=" cambiarCategoria( $any($event.target).value ) ">
+  <option value=""> Todas</option>
+  <option *ngFor=" let categoria of categorias$ | async " [value]="categoria.id"> {{ categoria.name }} </option>
 </select>
-<div *ngIf="productoEditando() as producto" class="formulario-edicion">
-  <h2>Editar producto</h2>
-  <p>ID: {{ producto.id }}</p>
-  <label for="titulo">Título:</label>
-  <input id="titulo" type="text" [value]="tituloEdicion()" (input)="tituloEdicion.set($any($event.target).value)">
-  <br><br>
-  <label for="precio">Precio:</label>
-  <input id="precio" type="number" [value]="precioEdicion()" (input)="precioEdicion.set(+$any($event.target).value)">
-  <br><br>
-  <label for="stock">Stock:</label>
-  <input id="stock" type="number" [value]="stockEdicion()" (input)="stockEdicion.set(+$any($event.target).value)">
-  <br><br>
-  <button (click)="guardarEdicion()">Guardar cambios</button>
-  <button (click)="cancelarEdicion()">Cancelar</button>
-</div>
-<p *ngIf="actualizacion$ | async as mensaje" class="mensaje">{{mensaje}}</p>
-
 <hr>
-
-<p *ngIf="cargando()">Cargando productos...</p>
-<p *ngIf="errorProductos()" class="error">{{errorProductos()}}</p>
-<p *ngIf="eliminacion$ | async as mensaje" class="mensaje">{{mensaje}}</p>
-
-<div *ngIf="productos$ | async as productos">
-  <p *ngIf="!errorProductos() && productos.length === 0">No hay productos disponibles.</p>
-  <div [ngSwitch]="rolActual()">
-    <div *ngSwitchCase="'admin'">
-      <app-tabla-productos [productos]="productos" (editar)="onEditar($event)" (eliminar)="onEliminar($event)"></app-tabla-productos>
-    </div>
-
-    <div *ngSwitchCase="'customer'">
-      <div class="catalogo">
-        <app-tarjeta-producto *ngFor="let producto of productos;trackBy: trackById"[producto]="producto"(agregarAlCarrito)="onAgregarAlCarrito($event)"></app-tarjeta-producto>
-      </div>
+<p *ngIf="cargando()"> Cargando productos... </p>
+<p *ngIf="errorProductos()" class="error" > {{ errorProductos() }}
+</p>
+<div *ngIf=" productos$ | async as productos ">
+  <p *ngIf=" !errorProductos() && productos.length === 0 "> No hay productos disponibles. </p>
+  <div class="catalogo">
+    <div *ngFor=" let producto of productos; trackBy: trackById ">
+      <app-tarjeta-producto [producto]="producto" (agregarAlCarrito)=" onAgregarAlCarrito($event) "></app-tarjeta-producto>
+      <a [routerLink]="[ '/productos', producto.id ]" > Ver detalle </a>
     </div>
   </div>
+</div>
+<hr>
+<div class="paginacion">
+  <button (click)="cambiarPagina(1)"> Página 1</button>
+  <button (click)="cambiarPagina(2)" > Página 2 </button>
+  <button (click)="cambiarPagina(3)" > Página 3 </button>
 </div>

@@ -1,0 +1,15 @@
+<h1>Mi carrito</h1>
+<p> Ítems: {{ cantidad() }}</p>
+<p> Total: ${{ total() }}</p>
+<div *ngIf="productos().length === 0">
+  <p>El carrito está vacío.</p>
+  <a routerLink="/productos"> Volver al catálogo</a>
+</div>
+
+<div *ngFor="let producto of productos(); trackBy: trackById">
+  <h2>{{ producto.title }}</h2>
+  <p> Precio: ${{ producto.price }}</p>
+  <button (click)="quitar(producto.id)"> Quitar </button>
+</div>
+
+<button *ngIf="productos().length > 0" (click)="vaciar()"> Vaciar carrito</button>

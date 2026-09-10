@@ -1,0 +1,23 @@
+<div *ngIf="producto$ | async as producto; else cargando">
+  <a routerLink="/productos"> ← Volver al catálogo</a>
+  <h1> {{ producto.title }}</h1>
+  <img [src]="producto.images[0]" [alt]="producto.title">
+  <p> {{ producto.description }}</p>
+  <p> Precio: ${{ producto.price }}</p>
+  <p> Categoría: {{ producto.category.name }}</p>
+  <p> Stock: {{ producto.stock }}</p>
+  <hr>
+  <h2> Productos relacionados
+  </h2>
+  <div *ngIf=" productosRelacionados$ | async as relacionados ">
+    <p *ngIf="relacionados.length === 0"> No hay productos relacionados.</p>
+    <div *ngFor=" let relacionado of relacionados; trackBy: trackById ">
+      <h3> {{ relacionado.title }}</h3>
+      <p> Precio: ${{ relacionado.price }}</p>
+      <a [routerLink]="[ '/productos', relacionado.id ]"> Ver producto</a>
+    </div>
+  </div>
+</div>
+<ng-template #cargando>
+  <p>Cargando producto...</p>
+</ng-template>
