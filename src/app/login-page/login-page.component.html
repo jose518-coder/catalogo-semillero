@@ -1,0 +1,15 @@
+<h1>Iniciar sesión</h1>
+
+<form (submit)="$event.preventDefault(); iniciarSesion()">
+  <label for="usuario">Usuario:</label>
+  <input id="usuario" type="text" [value]="usuario()" (input)="usuario.set($any($event.target).value)">
+  <br><br>
+  <label for="clave">Contraseña:</label>
+
+  <input id="clave" type="password" [value]="clave()" (input)="clave.set($any($event.target).value)">
+  <br><br>
+  <button type="submit">Iniciar sesión</button>
+</form>
+<p *ngIf="error()" class="error">{{ error() }}</p>
+<p>Contraseña de prueba:<strong>wposs123</strong></p>
+<p>Para administrador utiliza como usuario:<strong>admin</strong></p>
