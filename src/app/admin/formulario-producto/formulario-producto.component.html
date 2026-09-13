@@ -1,0 +1,144 @@
+<h2>{{ esEdicion() ? 'Editar producto' : 'Crear producto' }}</h2>
+
+<form [formGroup]="formulario" (ngSubmit)="guardar()">
+
+  
+  <div>
+    <label for="codigo">Código</label>
+    <input id="codigo" type="number" formControlName="codigo">
+  </div>
+
+  
+  <div>
+    <label for="titulo">Título</label>
+    <input id="titulo" type="text" formControlName="titulo">
+
+    <div *ngIf="formulario.controls.titulo.touched && formulario.controls.titulo.hasError('required')">
+      El título es obligatorio.
+    </div>
+
+    <div *ngIf="formulario.controls.titulo.touched && formulario.controls.titulo.hasError('minlength')">
+      El título debe tener al menos 3 caracteres.
+    </div>
+
+    <div *ngIf="formulario.controls.titulo.touched && formulario.controls.titulo.hasError('maxlength')">
+      El título no puede superar los 100 caracteres.
+    </div>
+
+    <div *ngIf="formulario.controls.titulo.touched && formulario.controls.titulo.hasError('soloEspacios')">
+      El título no puede contener solamente espacios.
+    </div>
+  </div>
+
+  
+  <div>
+    <label for="precio">Precio</label>
+    <input id="precio" type="number" formControlName="precio">
+
+    <div *ngIf="formulario.controls.precio.touched && formulario.controls.precio.hasError('required')">
+      El precio es obligatorio.
+    </div>
+
+    <div *ngIf="formulario.controls.precio.touched && formulario.controls.precio.hasError('min')">
+      El precio debe ser mayor que 0.
+    </div>
+  </div>
+
+  
+  <div>
+    <label for="descripcion">Descripción</label>
+
+    <textarea id="descripcion" formControlName="descripcion" maxlength="500"></textarea>
+
+    <p>
+      Caracteres restantes: {{ caracteresRestantes() }}
+    </p>
+
+    <div *ngIf="formulario.controls.descripcion.touched && formulario.controls.descripcion.hasError('required')">
+      La descripción es obligatoria.
+    </div>
+
+    <div *ngIf="formulario.controls.descripcion.touched && formulario.controls.descripcion.hasError('minlength')">
+      La descripción debe tener al menos 20 caracteres.
+    </div>
+
+    <div *ngIf="formulario.controls.descripcion.touched && formulario.controls.descripcion.hasError('maxlength')">
+      La descripción no puede superar los 500 caracteres.
+    </div>
+
+    <div *ngIf="formulario.controls.descripcion.touched && formulario.controls.descripcion.hasError('soloEspacios')">
+      La descripción no puede contener solamente espacios.
+    </div>
+  </div>
+
+
+  <div>
+    <label for="categoriaId">Categoría</label>
+
+    <select id="categoriaId" formControlName="categoriaId">
+      <option [ngValue]="0">Seleccione una categoría</option>
+
+      <option *ngFor="let categoria of categorias$ | async" [ngValue]="categoria.id">
+        {{ categoria.name }}
+      </option>
+    </select>
+
+    
+    <p *ngIf="cargandoCategorias()">
+      Cargando categorías...
+    </p>
+
+   
+    <p *ngIf="mensajeErrorCategorias()" role="alert">
+      {{ mensajeErrorCategorias() }}
+    </p>
+
+    
+    <div *ngIf="formulario.controls.categoriaId.touched && formulario.controls.categoriaId.hasError('min')">
+      Debe seleccionar una categoría válida.
+    </div>
+  </div>
+
+ 
+  <div formArrayName="imagenes">
+    <h3>Imágenes</h3>
+
+    <div *ngFor="let imagen of imagenes.controls; let i = index; trackBy: trackByIndex">
+      <label [for]="'imagen-' + i">
+        Imagen {{ i + 1 }}
+      </label>
+
+      <input [id]="'imagen-' + i" type="url" [formControlName]="i">
+
+      <button
+        type="button"
+        (click)="eliminarImagen(i)"
+        [disabled]="imagenes.length === 1">
+        Eliminar
+      </button>
+
+      <div *ngIf="imagen.touched && imagen.hasError('required')">
+        La URL de la imagen es obligatoria.
+      </div>
+    </div>
+
+    <button type="button" (click)="agregarImagen()">
+      Agregar imagen
+    </button>
+  </div>
+
+  
+  <p *ngIf="mensajeError()" role="alert">
+    {{ mensajeError() }}
+  </p>
+
+  
+  <button type="submit" [disabled]="cargando() || !productoCargado()">
+    {{ cargando() ? 'Guardando…' : 'Guardar' }}
+  </button>
+
+  <button type="button" (click)="cancelar()" [disabled]="cargando()">
+    Cancelar
+  </button>
+
+</form>

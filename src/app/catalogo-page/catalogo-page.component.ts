@@ -94,22 +94,21 @@ export class CatalogoPageComponent {
   totalCarrito =
     this.carritoService.total;
 
-  cambiarCategoria(
-    valor: string
-  ): void {
-    const categoria =
-      valor
-        ? Number(valor)
-        : null;
-    this.router.navigate(
-      ['/productos'],
-      {
-        queryParams: {
-          categoria,
-          pagina: null
-        }
+  cambiarCategoria(evento: Event): void {
+  const select = evento.target as HTMLSelectElement;
+  const valor = select.value;
+  const categoria = valor
+    ? Number(valor)
+    : null;
+  this.router.navigate(
+    ['/productos'],
+    {
+      queryParams: {
+        categoria,
+        pagina: null
       }
-    );
+    }
+  );
   }
 
   cambiarPagina(
