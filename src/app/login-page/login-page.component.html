@@ -1,15 +1,17 @@
 <h1>Iniciar sesión</h1>
 
-<form (submit)="$event.preventDefault(); iniciarSesion()">
+<form [formGroup]="formulario" (ngSubmit)="iniciarSesion()">
   <label for="usuario">Usuario:</label>
-  <input id="usuario" type="text" [value]="usuario()" (input)="usuario.set($any($event.target).value)">
-  <br><br>
-  <label for="clave">Contraseña:</label>
+  <input id="usuario" type="text" formControlName="usuario">
+  <div *ngIf="formulario.controls.usuario.touched && formulario.controls.usuario.hasError('required')">Escribe tu usuario.</div>
 
-  <input id="clave" type="password" [value]="clave()" (input)="clave.set($any($event.target).value)">
-  <br><br>
+  <label for="clave">Clave:</label>
+  <input id="clave" type="password" formControlName="clave">
+  <div *ngIf="formulario.controls.clave.touched && formulario.controls.clave.hasError('required')">Escribe tu clave.</div>
+
   <button type="submit">Iniciar sesión</button>
 </form>
 <p *ngIf="error()" class="error">{{ error() }}</p>
-<p>Contraseña de prueba:<strong>wposs123</strong></p>
-<p>Para administrador utiliza como usuario:<strong>admin</strong></p>
+<p>Contraseña de prueba: <strong>wposs123</strong></p>
+<p>Para administrador utiliza como usuario: <strong>admin</strong></p>
+<p>¿No tienes cuenta? <a routerLink="/registro">Regístrate</a>.</p>

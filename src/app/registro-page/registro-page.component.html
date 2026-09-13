@@ -1,0 +1,42 @@
+<h1>Crear cuenta</h1>
+
+<form [formGroup]="formulario" (ngSubmit)="registrar()">
+  <div>
+    <label for="nombre">Nombre</label>
+    <input id="nombre" type="text" formControlName="nombre">
+    <div *ngIf="formulario.controls.nombre.touched && formulario.controls.nombre.hasError('required')">Escribe tu nombre.</div>
+    <div *ngIf="formulario.controls.nombre.touched && formulario.controls.nombre.hasError('minlength')">Mínimo 3 caracteres.</div>
+    <div *ngIf="formulario.controls.nombre.touched && formulario.controls.nombre.hasError('soloEspacios')">El nombre no puede contener solo espacios.</div>
+  </div>
+
+  <div>
+    <label for="correo">Correo electrónico</label>
+    <input id="correo" type="email" formControlName="correo">
+    <p *ngIf="formulario.controls.correo.pending">Verificando disponibilidad…</p>
+    <div *ngIf="formulario.controls.correo.touched && formulario.controls.correo.hasError('required')">Escribe tu correo electrónico.</div>
+    <div *ngIf="formulario.controls.correo.touched && formulario.controls.correo.hasError('email')">Escribe un correo con formato válido.</div>
+    <div *ngIf="formulario.controls.correo.touched && formulario.controls.correo.hasError('correoNoDisponible')">Ese correo ya está registrado. Usa otro.</div>
+    <div *ngIf="formulario.controls.correo.touched && formulario.controls.correo.hasError('correoNoVerificado')">No pudimos verificar el correo. Revisa tu conexión.</div>
+  </div>
+
+  <div>
+    <label for="clave">Clave</label>
+    <input id="clave" type="password" formControlName="clave">
+    <div *ngIf="formulario.controls.clave.touched && formulario.controls.clave.hasError('required')">Escribe una clave.</div>
+    <div *ngIf="formulario.controls.clave.touched && formulario.controls.clave.hasError('minlength')">Mínimo 8 caracteres.</div>
+    <div *ngIf="formulario.controls.clave.touched && formulario.controls.clave.hasError('pattern')">Incluye al menos una letra y un número.</div>
+  </div>
+
+  <div>
+    <label for="confirmacion">Confirmar clave</label>
+    <input id="confirmacion" type="password" formControlName="confirmacion">
+    <div *ngIf="formulario.controls.confirmacion.touched && formulario.controls.confirmacion.hasError('required')">Confirma tu clave.</div>
+    <div *ngIf="formulario.controls.confirmacion.touched && formulario.hasError('clavesDistintas')">Las claves deben coincidir.</div>
+  </div>
+
+  <p *ngIf="mensajeError()" role="alert">{{ mensajeError() }}</p>
+  <button type="submit" [disabled]="enviando() || formulario.pending">{{ enviando() ? 'Registrando…' : 'Registrarme' }}</button>
+  <button type="button" (click)="resetear()" [disabled]="enviando()">Restablecer</button>
+</form>
+
+<p>¿Ya tienes cuenta? <a routerLink="/login">Inicia sesión</a>.</p>

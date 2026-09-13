@@ -42,6 +42,14 @@ export const routes: Routes = [
   },
 
   {
+    path: 'registro',
+    loadComponent: () =>
+      import('./registro-page/registro-page.component')
+        .then(m => m.RegistroPageComponent),
+    title: 'Crear cuenta'
+  },
+
+  {
     path: 'admin',
     canMatch: [adminGuard],
     loadChildren: () =>
