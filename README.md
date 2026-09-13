@@ -1,8 +1,8 @@
-# Catálogo de Productos — Semillero WPOSS
+# Taller 04 — Formularios, validaciones y registro
 
-Taller 01 — Catálogo de productos con componentes.
+Aplicación desarrollada como parte del Semillero WPOSS, continuando el proyecto de catálogo de productos desarrollado en los talleres anteriores.
 
-Proyecto desarrollado como parte del Semillero WPOSS, utilizando Angular 17.
+En este taller se implementan formularios reactivos para la creación y edición de productos, validaciones personalizadas, manejo de errores, registro de usuarios y validaciones asíncronas.
 
 ## Requisitos
 
@@ -13,30 +13,7 @@ Proyecto desarrollado como parte del Semillero WPOSS, utilizando Angular 17.
 
 ## Descripción
 
-Este proyecto implementa un catálogo de productos utilizando componentes standalone de Angular.
-
-La aplicación cuenta con dos vistas según el rol:
-
-- **Customer:** muestra los productos mediante tarjetas.
-- **Admin:** muestra los productos mediante una tabla.
-
-Los productos utilizados actualmente son datos simulados.
-
-## Conceptos implementados
-
-1. Componentes standalone
-2. `@Input({ required: true })`
-3. `@Output()` y `EventEmitter`
-4. Signals
-5. `computed()`
-6. Filtro por categoría
-7. Vista Admin / Customer
-8. `*ngIf`
-9. `*ngFor`
-10. `*ngSwitch`
-11. `trackBy`
-12. Comunicación entre componentes padre e hijo
-13. Carrito de productos
+formularios reactivos para alta y edición de productos, validaciones personalizadas, manejo de errores, registro de usuarios y validación asíncrona de correo. También se implementa FormArray para imágenes, contador de caracteres, CanDeactivate para cambios sin guardar y manejo de campos deshabilitados mediante getRawValue().
 
 ## Instalación
 
