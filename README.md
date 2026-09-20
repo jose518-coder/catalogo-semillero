@@ -1,19 +1,21 @@
-# Taller 04 — Formularios, validaciones y registro
+## Taller 05 — Proyecto final de frontend
 
-Aplicación desarrollada como parte del Semillero WPOSS, continuando el proyecto de catálogo de productos desarrollado en los talleres anteriores.
+En este taller se integraron las funcionalidades principales del proyecto:
 
-En este taller se implementan formularios reactivos para la creación y edición de productos, validaciones personalizadas, manejo de errores, registro de usuarios y validaciones asíncronas.
+- Autenticación mediante JWT y persistencia de sesión.
+- `AuthService` para login, logout, token, expiración y roles.
+- Interceptores HTTP para enviar el token y manejar errores `401`.
+- Guards para proteger rutas y acceso administrativo mediante `CanMatch`.
+- Redirección al recurso solicitado después del login mediante `volverA`.
+- Angular Material para cards, formularios, tabla, paginación, diálogos, snackbars e indicadores de carga.
+- Panel administrativo para crear, editar y eliminar productos.
+- Validaciones y formularios reactivos.
+- Manejo de errores y estados de carga.
+- Variables de entorno para la URL de la API.
+- Diseño responsive.
+- Preparación para despliegue en Vercel.
+- Configuración de fallback para permitir la recarga directa de rutas de Angular.
 
-## Requisitos
-
-- Node.js 20 LTS o superior
-- Angular CLI 17
-- npm
-- Git
-
-## Descripción
-
-formularios reactivos para alta y edición de productos, validaciones personalizadas, manejo de errores, registro de usuarios y validación asíncrona de correo. También se implementa FormArray para imágenes, contador de caracteres, CanDeactivate para cambios sin guardar y manejo de campos deshabilitados mediante getRawValue().
 
 ## Instalación
 

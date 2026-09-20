@@ -1,28 +1,45 @@
-table {
+.tabla-container {
   width: 100%;
-  border-collapse: collapse;
+  overflow-x: auto;
   margin-top: 20px;
 }
 
-th,
-td {
-  border: 1px solid #ddd;
-  padding: 10px;
-  text-align: left;
+.tabla-productos {
+  width: 100%;
 }
 
-th {
-  background-color: #f2f2f2;
-}
-
-td img {
+.imagen-producto {
   width: 60px;
   height: 60px;
   object-fit: contain;
 }
 
+.mat-column-id {
+  width: 70px;
+}
+
+.mat-column-imagen {
+  width: 100px;
+}
+
+.mat-column-precio {
+  width: 120px;
+}
+
+.mat-column-acciones {
+  width: 130px;
+}
+
 button {
-  margin-right: 5px;
-  padding: 6px 10px;
-  cursor: pointer;
+  margin-right: 4px;
+}
+
+@media (max-width: 600px) {
+  .tabla-container {
+    overflow-x: auto;
+  }
+
+  .tabla-productos {
+    min-width: 700px;
+  }
 }

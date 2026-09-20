@@ -1,45 +1,58 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { Observable, Subject, of } from 'rxjs';
-import { catchError, startWith, switchMap, tap } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { finalize, startWith, switchMap } from 'rxjs/operators';
+
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import {
+  MatSnackBar,
+  MatSnackBarModule
+} from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { Producto } from '../../models/producto';
 import { ProductoService } from '../../services/producto.service';
 import { TablaProductosComponent } from '../../tabla-productos/tabla-productos.component';
+import { ConfirmarDialogComponent } from '../../confirmar-dialog/confirmar-dialog.component';
 
 @Component({
   selector: 'app-admin-productos',
   standalone: true,
-  imports: [CommonModule, RouterLink, TablaProductosComponent],
+  imports: [
+    CommonModule,
+    RouterLink,
+    MatButtonModule,
+    MatDialogModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule,
+    TablaProductosComponent
+  ],
   templateUrl: './admin-productos.component.html',
   styleUrl: './admin-productos.component.css'
 })
 export class AdminProductosComponent {
   private productoService = inject(ProductoService);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
+
   private recargar$ = new Subject<void>();
+
+  readonly cargando = signal(true);
 
   productos$: Observable<Producto[]> = this.recargar$.pipe(
     startWith(undefined),
-    switchMap(() => this.productoService.obtenerTodos())
-  );
+    switchMap(() => {
+      this.cargando.set(true);
 
-  private eliminarProducto$ = new Subject<number>();
-
-  eliminacion$: Observable<string> = this.eliminarProducto$.pipe(
-    switchMap(id =>
-      this.productoService.eliminar(id).pipe(
-        tap(() => {
-          this.recargar$.next();
-        }),
-        switchMap(() => of('Producto eliminado correctamente.')),
-        catchError(error => {
-          console.error('Error al eliminar producto', error);
-          return of('No se pudo eliminar el producto.');
+      return this.productoService.obtenerTodos().pipe(
+        finalize(() => {
+          this.cargando.set(false);
         })
-      )
-    )
+      );
+    })
   );
 
   editar(producto: Producto): void {
@@ -51,6 +64,44 @@ export class AdminProductosComponent {
   }
 
   eliminar(producto: Producto): void {
-    this.eliminarProducto$.next(producto.id);
+    const dialogRef = this.dialog.open(
+      ConfirmarDialogComponent,
+      {
+        width: '400px',
+        data: {
+          nombre: producto.title
+        }
+      }
+    );
+
+    dialogRef.afterClosed().subscribe(confirmado => {
+      if (!confirmado) {
+        return;
+      }
+
+      this.productoService.eliminar(producto.id).subscribe({
+        next: () => {
+          this.recargar$.next();
+
+          this.snackBar.open(
+            'Producto eliminado correctamente.',
+            'Cerrar',
+            {
+              duration: 3000
+            }
+          );
+        },
+
+        error: () => {
+          this.snackBar.open(
+            'No se pudo eliminar el producto.',
+            'Cerrar',
+            {
+              duration: 4000
+            }
+          );
+        }
+      });
+    });
   }
 }

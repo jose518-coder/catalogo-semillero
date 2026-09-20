@@ -7,11 +7,25 @@ import { AuthService } from '../services/auth.service';
 import { clavesIguales } from '../validators/claves-iguales.validator';
 import { correoDisponible } from '../validators/correo-disponible.validator';
 import { noSoloEspacios } from '../validators/no-solo-espacios.validator';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-registro-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [
+    CommonModule, 
+    ReactiveFormsModule, 
+    RouterLink,
+    MatButtonModule,
+    MatCardModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatProgressSpinnerModule
+  ],
   templateUrl: './registro-page.component.html',
   styleUrl: './registro-page.component.css'
 })
@@ -52,11 +66,12 @@ export class RegistroPageComponent {
       avatar: 'https://i.pravatar.cc/300'
     }).subscribe({
       next: () => this.router.navigate(['/login']),
-      error: error => {
-        console.error('Error al registrar el usuario', error);
-        this.mensajeError.set('No se pudo completar el registro. Inténtalo de nuevo.');
-        this.enviando.set(false);
-      }
+      error: () => {
+      this.mensajeError.set(
+      'No se pudo completar el registro. Inténtalo de nuevo.'
+    );
+    this.enviando.set(false);
+}
     });
   }
 

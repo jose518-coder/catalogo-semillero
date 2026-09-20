@@ -1,0 +1,44 @@
+mat-toolbar {
+  height: auto;
+  min-height: 64px;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.titulo {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.espaciador {
+  flex: 1 1 auto;
+}
+
+.activo {
+  font-weight: 700;
+}
+
+@media (max-width: 600px) {
+  mat-toolbar {
+    min-height: 0;
+    padding: 8px;
+  }
+
+  .titulo {
+    flex: 0 0 100%;
+    margin-bottom: 4px;
+  }
+
+  .espaciador {
+    display: none;
+  }
+
+  a,
+  button {
+    font-size: 13px;
+  }
+}

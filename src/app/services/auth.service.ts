@@ -1,152 +1,211 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { RegistrarUsuario } from '../models/registrar-usuario';
+
+interface RespuestaLogin {
+  access_token: string;
+}
+
+interface ContenidoToken {
+  sub: string;
+  email?: string;
+  correo?: string;
+  exp: number;
+}
 
 interface UsuarioApi {
   id: number;
   email: string;
 }
 
-export interface UsuarioSesion {
-  usuario: string;
-  rol: 'admin' | 'usuario';
+export interface PerfilUsuario {
+  id: number;
+  email: string;
+  name: string;
+  role: string;
+  avatar?: string;
 }
+
+const CLAVE_TOKEN = 'wposs_token';
+const CLAVE_PERFIL = 'wposs_perfil';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private http = inject(HttpClient);
-  private readonly CLAVE = 'usuario_wposs';
 
-  correoEstaDisponible(correo: string): Observable<boolean> {
-    const correoNormalizado = correo.trim().toLowerCase();
+  private token = signal<string | null>(
+    this.leerToken()
+  );
 
-    return this.http.get<UsuarioApi[]>(
-      `${environment.apiUrl}/users`
-    ).pipe(
-      map(usuarios =>
-        !usuarios.some(
-          usuario =>
-            usuario.email.trim().toLowerCase() === correoNormalizado
-        )
+  private perfil = signal<PerfilUsuario | null>(
+    this.leerPerfil()
+  );
+
+  usuario = computed(() => {
+    const token = this.token();
+    if (!token) {
+      return null;
+    }
+    return this.decodificarToken(token);
+  });
+  
+  estaAutenticado = computed(() => {
+    const usuario = this.usuario();
+    return usuario !== null &&
+      usuario.exp * 1000 > Date.now();
+  });
+
+  iniciarSesion(
+    correo: string,
+    clave: string
+  ): Observable<RespuestaLogin> {
+    return this.http
+      .post<RespuestaLogin>(
+        `${environment.apiUrl}/auth/login`,
+        {
+          email: correo,
+          password: clave
+        }
       )
-    );
+      .pipe(
+        tap(respuesta => {
+          this.guardarToken(respuesta.access_token);
+        })
+      );
   }
 
-  registrar(datos: RegistrarUsuario): Observable<RegistrarUsuario> {
+  cargarPerfil(): Observable<PerfilUsuario> {
+    return this.http
+      .get<PerfilUsuario>(
+        `${environment.apiUrl}/auth/profile`
+      )
+      .pipe(
+        tap(perfil => {
+          this.guardarPerfil(perfil);
+        })
+      );
+  }
+
+  cerrarSesion(): void {
+    try {
+      localStorage.removeItem(CLAVE_TOKEN);
+      localStorage.removeItem(CLAVE_PERFIL);
+    } catch {
+    }
+    this.token.set(null);
+    this.perfil.set(null);
+  }
+
+  obtenerToken(): string | null {
+    return this.token();
+  }
+
+  obtenerPerfil(): PerfilUsuario | null {
+    return this.perfil();
+  }
+
+  tieneRol(rol: string): boolean {
+    return this.perfil()?.role === rol;
+  }
+
+  correoEstaDisponible(
+    correo: string
+  ): Observable<boolean> {
+    const correoNormalizado = correo
+      .trim()
+      .toLowerCase();
+    return this.http
+      .get<UsuarioApi[]>(
+        `${environment.apiUrl}/users`
+      )
+      .pipe(
+        map(usuarios =>
+          !usuarios.some(
+            usuario =>
+              usuario.email
+                .trim()
+                .toLowerCase() === correoNormalizado
+          )
+        )
+      );
+  }
+
+  registrar(
+    datos: RegistrarUsuario
+  ): Observable<RegistrarUsuario> {
     return this.http.post<RegistrarUsuario>(
       `${environment.apiUrl}/users`,
       datos
     );
   }
 
-  iniciarSesion(
-    usuario: string,
-    clave: string
-  ): boolean {
-    if (clave !== 'wposs123') {
-      return false;
+  private guardarToken(token: string): void {
+    try {
+      localStorage.setItem(CLAVE_TOKEN, token);
+      this.token.set(token);
+    } catch {
+      this.token.set(null);
     }
+  }
 
-    const sesion: UsuarioSesion = {
-      usuario,
-      rol: usuario.toLowerCase() === 'admin'
-        ? 'admin'
-        : 'usuario'
-    };
-
+  private guardarPerfil(perfil: PerfilUsuario): void {
     try {
       localStorage.setItem(
-        this.CLAVE,
-        JSON.stringify(sesion)
+        CLAVE_PERFIL,
+        JSON.stringify(perfil)
       );
-
-      return true;
-    } catch (error) {
-      console.error(
-        'No se pudo guardar la sesión',
-        error
-      );
-
-      return false;
+      this.perfil.set(perfil);
+    } catch {
+      this.perfil.set(perfil);
     }
   }
 
-  cerrarSesion(): void {
+  private leerToken(): string | null {
     try {
-      localStorage.removeItem(this.CLAVE);
-    } catch (error) {
-      console.error(
-        'No se pudo cerrar la sesión',
-        error
-      );
+      return localStorage.getItem(CLAVE_TOKEN);
+    } catch {
+      return null;
     }
   }
 
-  estaAutenticado(): boolean {
-    try {
-      const sesion = localStorage.getItem(this.CLAVE);
-
-      if (!sesion) {
-        return false;
-      }
-
-      const usuario: unknown = JSON.parse(sesion);
-
-      return (
-        typeof usuario === 'object' &&
-        usuario !== null &&
-        'usuario' in usuario
-      );
-    } catch (error) {
-      console.error(
-        'Sesión inválida',
-        error
-      );
-
-      return false;
+  private leerPerfil(): PerfilUsuario | null {
+  try {
+    const datos = localStorage.getItem(CLAVE_PERFIL);
+    if (!datos) {
+      return null;
     }
+    const perfil: unknown = JSON.parse(datos);
+    if (
+      typeof perfil !== 'object' ||
+      perfil === null ||
+      !('id' in perfil) ||
+      !('email' in perfil) ||
+      !('role' in perfil)
+    ) {
+      return null;
+    }
+    return perfil as PerfilUsuario;
+  } catch {
+    return null;
+  }
   }
 
-  tieneRol(rol: string): boolean {
+  private decodificarToken(
+    token: string
+  ): ContenidoToken | null {
     try {
-      const sesion = localStorage.getItem(this.CLAVE);
-
-      if (!sesion) {
-        return false;
-      }
-
-      const usuario = JSON.parse(sesion) as UsuarioSesion;
-
-      return usuario.rol === rol;
-    } catch (error) {
-      console.error(
-        'No se pudo obtener el rol',
-        error
-      );
-
-      return false;
-    }
-  }
-
-  obtenerUsuario(): UsuarioSesion | null {
-    try {
-      const sesion = localStorage.getItem(this.CLAVE);
-
-      if (!sesion) {
+      const partes = token.split('.');
+      if (partes.length !== 3) {
         return null;
       }
-
-      return JSON.parse(sesion) as UsuarioSesion;
-    } catch (error) {
-      console.error(
-        'Sesión inválida',
-        error
-      );
-
+      return JSON.parse(
+        atob(partes[1])
+      ) as ContenidoToken;
+    } catch {
       return null;
     }
   }

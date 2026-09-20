@@ -1,10 +1,23 @@
-<header>
-  <nav>
-    <a routerLink="/productos" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }"> Productos</a>
-    <a *ngIf="auth.estaAutenticado()" routerLink="/carrito" routerLinkActive="activo"> Carrito</a>
-    <a *ngIf="auth.tieneRol('admin')" routerLink="/admin" routerLinkActive="activo"> Administración</a>
-    <a *ngIf="!auth.estaAutenticado()" routerLink="/login" routerLinkActive="activo"> Iniciar sesión</a>
-    <a *ngIf="!auth.estaAutenticado()" routerLink="/registro" routerLinkActive="activo"> Registrarme</a>
-    <button *ngIf="auth.estaAutenticado()" (click)="cerrarSesion()"> Cerrar sesión</button>
-  </nav>
-</header>
+<mat-toolbar>
+  <span class="titulo">Catálogo</span>
+  <span class="espaciador"></span>
+
+  <a mat-button routerLink="/productos" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }">
+    Productos
+  </a>
+  <a *ngIf="auth.estaAutenticado()" mat-button routerLink="/carrito" routerLinkActive="activo">
+    Carrito
+  </a>
+  <a *ngIf="auth.tieneRol('admin')" mat-button routerLink="/admin" routerLinkActive="activo">
+    Administración
+  </a>
+  <a *ngIf="!auth.estaAutenticado()" mat-button routerLink="/login" routerLinkActive="activo">
+    Iniciar sesión
+  </a>
+  <a *ngIf="!auth.estaAutenticado()" mat-button routerLink="/registro" routerLinkActive="activo">
+    Registrarme
+  </a>
+  <button *ngIf="auth.estaAutenticado()" mat-button type="button" (click)="cerrarSesion()">
+    Cerrar sesión
+  </button>
+</mat-toolbar>

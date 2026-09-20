@@ -1,4 +1,71 @@
-form { display: grid; gap: 1rem; max-width: 34rem; }
-form > div { display: grid; gap: .35rem; }
-form .ng-invalid.ng-touched { border-color: #b42318; }
-form div div, [role="alert"] { color: #b42318; }
+.registro-container {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 32px 16px;
+  box-sizing: border-box;
+}
+
+.registro-card {
+  width: min(100%, 500px);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.mensaje-error {
+  margin: 8px 0;
+}
+
+.acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 8px;
+}
+
+.acciones button[type='submit'] {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+mat-card-actions {
+  padding: 8px 16px 16px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+@media (max-width: 600px) {
+  .registro-container {
+    padding: 16px 12px;
+  }
+
+  .acciones {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .acciones button {
+    width: 100%;
+  }
+
+  mat-card-actions {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
