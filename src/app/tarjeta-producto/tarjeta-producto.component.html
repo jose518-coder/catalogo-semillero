@@ -1,8 +1,18 @@
-<div class="tarjeta">
-  <img [src]="producto.images[0]" [alt]="producto.title">
-  <h2>{{ producto.title }}</h2>
-  <p>Precio: ${{ producto.price }}</p>
-  <p>Categoría: {{ producto.category.name }}</p>
-  <span *ngIf="producto.stock === 0">Agotado</span>
-  <button (click)="agregar()">Agregar al carrito</button>
-</div>
+<mat-card class="tarjeta">
+
+  <img mat-card-image [src]="producto.images[0]" [alt]="producto.title">
+
+  <mat-card-header><mat-card-title> {{ producto.title }} </mat-card-title>
+    <mat-card-subtitle> {{ producto.category.name }} </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    <p class="precio"> ${{ producto.price }} </p>
+    <p> {{ producto.description }} </p>
+    <p> Stock: {{ producto.stock }} </p>
+    <span *ngIf="producto.stock === 0" class="agotado"> Agotado </span>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button type="button" [disabled]="producto.stock === 0" (click)="agregarAlCarrito.emit(producto)" > Agregar al carrito </button>
+  </mat-card-actions>
+</mat-card>

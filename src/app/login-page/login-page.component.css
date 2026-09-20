@@ -1,0 +1,45 @@
+.login-container {
+  min-height: calc(100vh - 80px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 32px 16px;
+  box-sizing: border-box;
+}
+
+.login-card {
+  width: min(100%, 450px);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+button[type='submit'] {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.mensaje-error {
+  margin: 8px 0;
+}
+
+mat-card-actions {
+  padding: 8px 16px 16px;
+}
+
+@media (max-width: 600px) {
+  .login-container {
+    padding: 16px 12px;
+  }
+}

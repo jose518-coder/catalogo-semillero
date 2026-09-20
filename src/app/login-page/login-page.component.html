@@ -1,17 +1,116 @@
-<h1>Iniciar sesión</h1>
+<div class="login-container">
 
-<form [formGroup]="formulario" (ngSubmit)="iniciarSesion()">
-  <label for="usuario">Usuario:</label>
-  <input id="usuario" type="text" formControlName="usuario">
-  <div *ngIf="formulario.controls.usuario.touched && formulario.controls.usuario.hasError('required')">Escribe tu usuario.</div>
+  <mat-card class="login-card">
 
-  <label for="clave">Clave:</label>
-  <input id="clave" type="password" formControlName="clave">
-  <div *ngIf="formulario.controls.clave.touched && formulario.controls.clave.hasError('required')">Escribe tu clave.</div>
+    <mat-card-header>
+      <mat-card-title>
+        Iniciar sesión
+      </mat-card-title>
 
-  <button type="submit">Iniciar sesión</button>
-</form>
-<p *ngIf="error()" class="error">{{ error() }}</p>
-<p>Contraseña de prueba: <strong>wposs123</strong></p>
-<p>Para administrador utiliza como usuario: <strong>admin</strong></p>
-<p>¿No tienes cuenta? <a routerLink="/registro">Regístrate</a>.</p>
+      <mat-card-subtitle>
+        Accede a tu cuenta
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+
+      <form
+        [formGroup]="formulario"
+        (ngSubmit)="iniciarSesion()"
+      >
+
+        <mat-form-field appearance="outline">
+          <mat-label>Correo</mat-label>
+
+          <input
+            matInput
+            type="email"
+            formControlName="correo"
+            autocomplete="email"
+          >
+
+          <mat-error
+            *ngIf="
+              formulario.controls.correo.hasError('required')
+            "
+          >
+            El correo es obligatorio.
+          </mat-error>
+
+          <mat-error
+            *ngIf="
+              formulario.controls.correo.hasError('email')
+            "
+          >
+            Escribe un correo válido.
+          </mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+
+          <input
+            matInput
+            type="password"
+            formControlName="clave"
+            autocomplete="current-password"
+          >
+
+          <mat-error
+            *ngIf="
+              formulario.controls.clave.hasError('required')
+            "
+          >
+            La contraseña es obligatoria.
+          </mat-error>
+        </mat-form-field>
+
+
+        <p
+          *ngIf="error()"
+          class="mensaje-error"
+          role="alert"
+        >
+          {{ error() }}
+        </p>
+
+
+        <button
+          mat-raised-button
+          type="submit"
+          [disabled]="cargando()"
+        >
+
+          <mat-progress-spinner
+            *ngIf="cargando()"
+            mode="indeterminate"
+            diameter="20"
+          ></mat-progress-spinner>
+
+          <span *ngIf="!cargando()">
+            Iniciar sesión
+          </span>
+
+          <span *ngIf="cargando()">
+            Iniciando sesión...
+          </span>
+
+        </button>
+
+      </form>
+
+    </mat-card-content>
+
+    <mat-card-actions>
+      <a
+        mat-button
+        routerLink="/registro"
+      >
+        Crear una cuenta
+      </a>
+    </mat-card-actions>
+
+  </mat-card>
+
+</div>

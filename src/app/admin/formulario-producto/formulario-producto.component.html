@@ -2,143 +2,153 @@
 
 <form [formGroup]="formulario" (ngSubmit)="guardar()">
 
-  
-  <div>
-    <label for="codigo">Código</label>
-    <input id="codigo" type="number" formControlName="codigo">
-  </div>
+  <mat-form-field appearance="outline">
+    <mat-label>Código</mat-label>
+    <input matInput id="codigo" type="number" formControlName="codigo">
+  </mat-form-field>
 
-  
-  <div>
-    <label for="titulo">Título</label>
-    <input id="titulo" type="text" formControlName="titulo">
+  <mat-form-field appearance="outline">
+    <mat-label>Título</mat-label>
+    <input matInput id="titulo" type="text" formControlName="titulo">
 
-    <div *ngIf="formulario.controls.titulo.touched && formulario.controls.titulo.hasError('required')">
+    <mat-error *ngIf="formulario.controls.titulo.touched && formulario.controls.titulo.hasError('required')">
       El título es obligatorio.
-    </div>
+    </mat-error>
 
-    <div *ngIf="formulario.controls.titulo.touched && formulario.controls.titulo.hasError('minlength')">
+    <mat-error *ngIf="formulario.controls.titulo.touched && formulario.controls.titulo.hasError('minlength')">
       El título debe tener al menos 3 caracteres.
-    </div>
+    </mat-error>
 
-    <div *ngIf="formulario.controls.titulo.touched && formulario.controls.titulo.hasError('maxlength')">
+    <mat-error *ngIf="formulario.controls.titulo.touched && formulario.controls.titulo.hasError('maxlength')">
       El título no puede superar los 100 caracteres.
-    </div>
+    </mat-error>
 
-    <div *ngIf="formulario.controls.titulo.touched && formulario.controls.titulo.hasError('soloEspacios')">
+    <mat-error *ngIf="formulario.controls.titulo.touched && formulario.controls.titulo.hasError('soloEspacios')">
       El título no puede contener solamente espacios.
-    </div>
-  </div>
+    </mat-error>
+  </mat-form-field>
 
-  
-  <div>
-    <label for="precio">Precio</label>
-    <input id="precio" type="number" formControlName="precio">
+  <mat-form-field appearance="outline">
+    <mat-label>Precio</mat-label>
+    <input matInput id="precio" type="number" formControlName="precio">
 
-    <div *ngIf="formulario.controls.precio.touched && formulario.controls.precio.hasError('required')">
+    <mat-error *ngIf="formulario.controls.precio.touched && formulario.controls.precio.hasError('required')">
       El precio es obligatorio.
-    </div>
+    </mat-error>
 
-    <div *ngIf="formulario.controls.precio.touched && formulario.controls.precio.hasError('min')">
+    <mat-error *ngIf="formulario.controls.precio.touched && formulario.controls.precio.hasError('min')">
       El precio debe ser mayor que 0.
-    </div>
-  </div>
+    </mat-error>
+  </mat-form-field>
 
-  
-  <div>
-    <label for="descripcion">Descripción</label>
+  <mat-form-field appearance="outline" class="campo-descripcion">
+    <mat-label>Descripción</mat-label>
+    <textarea matInput id="descripcion" formControlName="descripcion" maxlength="500" rows="5"></textarea>
 
-    <textarea id="descripcion" formControlName="descripcion" maxlength="500"></textarea>
+    <mat-hint align="end">
+      {{ caracteresRestantes() }} caracteres restantes
+    </mat-hint>
 
-    <p>
-      Caracteres restantes: {{ caracteresRestantes() }}
-    </p>
-
-    <div *ngIf="formulario.controls.descripcion.touched && formulario.controls.descripcion.hasError('required')">
+    <mat-error *ngIf="formulario.controls.descripcion.touched && formulario.controls.descripcion.hasError('required')">
       La descripción es obligatoria.
-    </div>
+    </mat-error>
 
-    <div *ngIf="formulario.controls.descripcion.touched && formulario.controls.descripcion.hasError('minlength')">
+    <mat-error *ngIf="formulario.controls.descripcion.touched && formulario.controls.descripcion.hasError('minlength')">
       La descripción debe tener al menos 20 caracteres.
-    </div>
+    </mat-error>
 
-    <div *ngIf="formulario.controls.descripcion.touched && formulario.controls.descripcion.hasError('maxlength')">
+    <mat-error *ngIf="formulario.controls.descripcion.touched && formulario.controls.descripcion.hasError('maxlength')">
       La descripción no puede superar los 500 caracteres.
-    </div>
+    </mat-error>
 
-    <div *ngIf="formulario.controls.descripcion.touched && formulario.controls.descripcion.hasError('soloEspacios')">
+    <mat-error *ngIf="formulario.controls.descripcion.touched && formulario.controls.descripcion.hasError('soloEspacios')">
       La descripción no puede contener solamente espacios.
-    </div>
-  </div>
+    </mat-error>
+  </mat-form-field>
 
+  <mat-form-field appearance="outline">
+    <mat-label>Categoría</mat-label>
 
-  <div>
-    <label for="categoriaId">Categoría</label>
+    <mat-select id="categoriaId" formControlName="categoriaId">
+      <mat-option [value]="0">Seleccione una categoría</mat-option>
 
-    <select id="categoriaId" formControlName="categoriaId">
-      <option [ngValue]="0">Seleccione una categoría</option>
-
-      <option *ngFor="let categoria of categorias$ | async" [ngValue]="categoria.id">
+      <mat-option *ngFor="let categoria of categorias$ | async" [value]="categoria.id">
         {{ categoria.name }}
-      </option>
-    </select>
+      </mat-option>
+    </mat-select>
 
-    
-    <p *ngIf="cargandoCategorias()">
-      Cargando categorías...
-    </p>
-
-   
-    <p *ngIf="mensajeErrorCategorias()" role="alert">
-      {{ mensajeErrorCategorias() }}
-    </p>
-
-    
-    <div *ngIf="formulario.controls.categoriaId.touched && formulario.controls.categoriaId.hasError('min')">
+    <mat-error *ngIf="formulario.controls.categoriaId.touched && formulario.controls.categoriaId.hasError('min')">
       Debe seleccionar una categoría válida.
-    </div>
+    </mat-error>
+  </mat-form-field>
+
+  <div *ngIf="cargandoCategorias()" class="cargando-categorias">
+    <mat-progress-spinner mode="indeterminate" diameter="28"></mat-progress-spinner>
+    <span>Cargando categorías...</span>
   </div>
 
- 
+  <p *ngIf="mensajeErrorCategorias()" class="mensaje-error" role="alert">
+    {{ mensajeErrorCategorias() }}
+  </p>
+
   <div formArrayName="imagenes">
     <h3>Imágenes</h3>
 
-    <div *ngFor="let imagen of imagenes.controls; let i = index; trackBy: trackByIndex">
-      <label [for]="'imagen-' + i">
-        Imagen {{ i + 1 }}
-      </label>
+    <div
+      *ngFor="let imagen of imagenes.controls; let i = index; trackBy: trackByIndex"
+      class="imagen-item">
 
-      <input [id]="'imagen-' + i" type="url" [formControlName]="i">
+      <mat-form-field appearance="outline">
+        <mat-label>Imagen {{ i + 1 }}</mat-label>
+
+        <input matInput [id]="'imagen-' + i" type="url" [formControlName]="i">
+
+        <mat-error *ngIf="imagen.touched && imagen.hasError('required')">
+          La URL de la imagen es obligatoria.
+        </mat-error>
+      </mat-form-field>
 
       <button
+        mat-stroked-button
         type="button"
         (click)="eliminarImagen(i)"
         [disabled]="imagenes.length === 1">
         Eliminar
       </button>
-
-      <div *ngIf="imagen.touched && imagen.hasError('required')">
-        La URL de la imagen es obligatoria.
-      </div>
     </div>
 
-    <button type="button" (click)="agregarImagen()">
+    <button mat-stroked-button type="button" (click)="agregarImagen()">
       Agregar imagen
     </button>
   </div>
 
-  
-  <p *ngIf="mensajeError()" role="alert">
+  <p *ngIf="mensajeError()" class="mensaje-error" role="alert">
     {{ mensajeError() }}
   </p>
 
-  
-  <button type="submit" [disabled]="cargando() || !productoCargado()">
-    {{ cargando() ? 'Guardando…' : 'Guardar' }}
-  </button>
+  <div class="acciones">
+    <button
+      mat-raised-button
+      type="submit"
+      [disabled]="cargando() || !productoCargado()">
 
-  <button type="button" (click)="cancelar()" [disabled]="cargando()">
-    Cancelar
-  </button>
+      <mat-progress-spinner
+        *ngIf="cargando()"
+        mode="indeterminate"
+        diameter="20">
+      </mat-progress-spinner>
+
+      <span *ngIf="!cargando()">Guardar</span>
+      <span *ngIf="cargando()">Guardando...</span>
+    </button>
+
+    <button
+      mat-button
+      type="button"
+      (click)="cancelar()"
+      [disabled]="cargando()">
+      Cancelar
+    </button>
+  </div>
 
 </form>

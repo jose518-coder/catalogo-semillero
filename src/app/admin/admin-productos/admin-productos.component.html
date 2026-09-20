@@ -1,24 +1,16 @@
-<h1>Administración de productos</h1>
-<hr>
-
-<a routerLink="/admin/productos/nuevo">Nuevo producto</a>
-<hr>
-
-<p *ngIf="eliminacion$ | async as mensaje" class="mensaje">
-  {{ mensaje }}
-</p>
-
-<h2>Productos</h2>
-
-<div *ngIf="productos$ | async as productos">
-  <p *ngIf="productos.length === 0">
-    No hay productos disponibles.
-  </p>
-
-  <app-tabla-productos
-    *ngIf="productos.length > 0"
-    [productos]="productos"
-    (editar)="editar($event)"
-    (eliminar)="eliminar($event)">
-  </app-tabla-productos>
+<div class="admin-container">
+  <h1>Administración de productos</h1>
+  <div class="encabezado">
+    <h2>Productos</h2>
+    <a mat-raised-button routerLink="/admin/productos/nuevo">Nuevo producto</a>
+  </div>
+  <ng-container *ngIf="productos$ | async as productos">
+    <app-tabla-productos [productos]="productos" (editar)="editar($event)" (eliminar)="eliminar($event)">
+    </app-tabla-productos>
+  </ng-container>
+  <div *ngIf="cargando()" class="estado-carga" aria-live="polite">
+    <mat-progress-spinner mode="indeterminate" diameter="48" aria-label="Cargando productos">
+    </mat-progress-spinner>
+    <p>Cargando productos...</p>
+  </div>
 </div>

@@ -1,42 +1,23 @@
 # Catálogo de Productos — Semillero WPOSS
 
-Taller 01 — Catálogo de productos con componentes.
+## Taller 05 — Proyecto final de frontend
 
-Proyecto desarrollado como parte del Semillero WPOSS, utilizando Angular 17.
+En este taller se integraron las funcionalidades principales del proyecto:
 
-## Requisitos
+- Autenticación mediante JWT y persistencia de sesión.
+- `AuthService` para login, logout, token, expiración y roles.
+- Interceptores HTTP para enviar el token y manejar errores `401`.
+- Guards para proteger rutas y acceso administrativo mediante `CanMatch`.
+- Redirección al recurso solicitado después del login mediante `volverA`.
+- Angular Material para cards, formularios, tabla, paginación, diálogos, snackbars e indicadores de carga.
+- Panel administrativo para crear, editar y eliminar productos.
+- Validaciones y formularios reactivos.
+- Manejo de errores y estados de carga.
+- Variables de entorno para la URL de la API.
+- Diseño responsive.
+- Preparación para despliegue en Vercel.
+- Configuración de fallback para permitir la recarga directa de rutas de Angular.
 
-- Node.js 20 LTS o superior
-- Angular CLI 17
-- npm
-- Git
-
-## Descripción
-
-Este proyecto implementa un catálogo de productos utilizando componentes standalone de Angular.
-
-La aplicación cuenta con dos vistas según el rol:
-
-- **Customer:** muestra los productos mediante tarjetas.
-- **Admin:** muestra los productos mediante una tabla.
-
-Los productos utilizados actualmente son datos simulados.
-
-## Conceptos implementados
-
-1. Componentes standalone
-2. `@Input({ required: true })`
-3. `@Output()` y `EventEmitter`
-4. Signals
-5. `computed()`
-6. Filtro por categoría
-7. Vista Admin / Customer
-8. `*ngIf`
-9. `*ngFor`
-10. `*ngSwitch`
-11. `trackBy`
-12. Comunicación entre componentes padre e hijo
-13. Carrito de productos
 
 ## Instalación
 
