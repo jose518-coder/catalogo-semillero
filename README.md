@@ -16,6 +16,12 @@ En este taller se integraron las funcionalidades principales del proyecto:
 - Preparación para despliegue en Vercel.
 - Configuración de fallback para permitir la recarga directa de rutas de Angular.
 
+## Despliegue vercel
+https://catalogo-semillero.vercel.app/
+
+## Cuenta
+admin@mail.com
+admin123
 
 ## Instalación
 
