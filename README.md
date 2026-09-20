@@ -1,5 +1,3 @@
-# Catálogo de Productos — Semillero WPOSS
-
 ## Taller 05 — Proyecto final de frontend
 
 En este taller se integraron las funcionalidades principales del proyecto:
