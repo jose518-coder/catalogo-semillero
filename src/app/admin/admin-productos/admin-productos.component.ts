@@ -6,10 +6,7 @@ import { finalize, startWith, switchMap } from 'rxjs/operators';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import {
-  MatSnackBar,
-  MatSnackBarModule
-} from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { Producto } from '../../models/producto';
@@ -41,6 +38,7 @@ export class AdminProductosComponent {
   private recargar$ = new Subject<void>();
 
   readonly cargando = signal(true);
+  readonly error = this.productoService.error;
 
   productos$: Observable<Producto[]> = this.recargar$.pipe(
     startWith(undefined),

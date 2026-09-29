@@ -5,7 +5,8 @@
     <a mat-raised-button routerLink="/admin/productos/nuevo">Nuevo producto</a>
   </div>
   <ng-container *ngIf="productos$ | async as productos">
-    <app-tabla-productos [productos]="productos" (editar)="editar($event)" (eliminar)="eliminar($event)">
+    <p *ngIf="error()" class="mensaje-error" role="alert">{{ error() }}</p>
+    <app-tabla-productos *ngIf="!error()" [productos]="productos" (editar)="editar($event)" (eliminar)="eliminar($event)">
     </app-tabla-productos>
   </ng-container>
   <div *ngIf="cargando()" class="estado-carga" aria-live="polite">
