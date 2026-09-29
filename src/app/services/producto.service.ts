@@ -16,7 +16,7 @@ export class ProductoService {
   private http = inject(HttpClient);
 
   private apiUrl =
-    `${environment.apiUrl}/products`;
+    `${environment.apiUrl}/productos`;
 
   obtenerTodos(
     categoryId?: number,
