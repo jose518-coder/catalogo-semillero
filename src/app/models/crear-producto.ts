@@ -1,7 +1,8 @@
 export interface CrearProducto {
-  title: string;
-  price: number;
-  description: string;
-  images: string[];
-  categoryId: number;
+  titulo: string;
+  precio: number;
+  existencias: number;
+  categoriaId: number;
+  descripcion: string;
+  imagenes: string[];
 }

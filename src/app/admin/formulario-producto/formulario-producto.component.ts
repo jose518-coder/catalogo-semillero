@@ -1,9 +1,28 @@
+
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, OnInit, inject, signal } from '@angular/core';
+import {
+  Component,
+  DestroyRef,
+  OnInit,
+  inject,
+  signal
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormArray, FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormArray,
+  FormBuilder,
+  FormControl,
+  ReactiveFormsModule,
+  Validators
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable, catchError, of, tap } from 'rxjs';
+import {
+  Observable,
+  catchError,
+  finalize,
+  of,
+  shareReplay
+} from 'rxjs';
 
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -46,16 +65,21 @@ export class FormularioProductoComponent implements PuedeSalir, OnInit {
   readonly mensajeErrorCategorias = signal<string | null>(null);
   readonly cargandoCategorias = signal(true);
 
-  readonly categorias$: Observable<Categoria[]> = this.categoriaService.obtenerTodas().pipe(
-    tap(() => {
-      this.cargandoCategorias.set(false);
-    }),
-    catchError(() => {
-      this.cargandoCategorias.set(false);
-      this.mensajeErrorCategorias.set('No se pudieron cargar las categorías.');
-      return of([]);
-    })
-  );
+  readonly categorias$: Observable<Categoria[]> =
+    this.categoriaService.obtenerTodas().pipe(
+      catchError(error => {
+        console.error('Error al cargar categorías:', error);
+        this.mensajeErrorCategorias.set(
+          error.error?.mensaje ??
+          'No se pudieron cargar las categorías. Revisa la conexión e inténtalo de nuevo.'
+        );
+        return of([]);
+      }),
+      finalize(() => {
+        this.cargandoCategorias.set(false);
+      }),
+      shareReplay({ bufferSize: 1, refCount: true })
+    );
 
   readonly cargando = signal(false);
   readonly mensajeError = signal<string | null>(null);
@@ -85,7 +109,16 @@ export class FormularioProductoComponent implements PuedeSalir, OnInit {
       0,
       [
         Validators.required,
-        Validators.min(0.01)
+        Validators.min(0.01),
+        Validators.pattern(/^\d{1,10}(\.\d{1,2})?$/)
+      ]
+    ],
+    existencias: [
+      0,
+      [
+        Validators.required,
+        Validators.min(0),
+        Validators.pattern(/^\d+$/)
       ]
     ],
     descripcion: [
@@ -121,7 +154,7 @@ export class FormularioProductoComponent implements PuedeSalir, OnInit {
   crearImagen(valor = ''): FormControl<string> {
     return this.fb.nonNullable.control(
       valor,
-      [Validators.required]
+      [Validators.maxLength(2048)]
     );
   }
 
@@ -165,20 +198,24 @@ export class FormularioProductoComponent implements PuedeSalir, OnInit {
 
     this.productoService
       .obtenerPorId(id)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.cargando.set(false))
+      )
       .subscribe({
         next: producto => {
           this.formulario.patchValue({
             codigo: producto.id,
             titulo: producto.titulo,
             precio: producto.precio,
-            descripcion: producto.description,
-            categoriaId: producto.category.id
+            existencias: producto.existencias,
+            descripcion: producto.descripcion,
+            categoriaId: producto.categoriaId
           });
 
           this.imagenes.clear();
 
-          producto.images.forEach(imagen => {
+          producto.imagenes.forEach(imagen => {
             this.imagenes.push(this.crearImagen(imagen));
           });
 
@@ -188,12 +225,11 @@ export class FormularioProductoComponent implements PuedeSalir, OnInit {
 
           this.formulario.markAsPristine();
           this.productoCargado.set(true);
-          this.cargando.set(false);
         },
-        error: () => {
+        error: error => {
+          console.error('Error al cargar el producto:', error);
           this.mensajeError.set('No se pudo cargar el producto.');
           this.productoCargado.set(false);
-          this.cargando.set(false);
         }
       });
   }
@@ -212,18 +248,18 @@ export class FormularioProductoComponent implements PuedeSalir, OnInit {
     const datos = this.formulario.getRawValue();
 
     const producto: CrearProducto = {
-      title: datos.titulo.trim(),
-      price: datos.precio,
-      description: datos.descripcion.trim(),
-      images: datos.imagenes.map(imagen => imagen.trim()),
-      categoryId: datos.categoriaId
+      titulo: datos.titulo.trim(),
+      precio: datos.precio,
+      existencias: Number(datos.existencias),
+      categoriaId: Number(datos.categoriaId),
+      descripcion: datos.descripcion.trim(),
+      imagenes: datos.imagenes.map(imagen => imagen.trim()).filter(Boolean)
     };
 
     this.cargando.set(true);
     this.mensajeError.set(null);
 
     const cambios: ActualizarProducto = {
-      id: datos.codigo,
       ...producto
     };
 
@@ -232,15 +268,35 @@ export class FormularioProductoComponent implements PuedeSalir, OnInit {
       : this.productoService.actualizar(this.productoId, cambios);
 
     solicitud$
-      .pipe(takeUntilDestroyed(this.destroyRef))
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.cargando.set(false))
+      )
       .subscribe({
         next: () => {
           this.formulario.markAsPristine();
           this.router.navigate(['/admin/productos']);
         },
-        error: () => {
-          this.mensajeError.set('No se pudo guardar el producto. Inténtalo de nuevo.');
-          this.cargando.set(false);
+        error: error => {
+          console.error('Error al guardar el producto:', error);
+          const campos = error.error?.campos as
+            Record<string, string> | undefined;
+          const detalleCampos = campos
+            ? Object.entries(campos)
+                .map(([campo, mensaje]) => `${campo}: ${mensaje}`)
+                .join(' ')
+            : '';
+          const mensaje = error.error?.mensaje as string | undefined;
+          const acceso = error.status === 401
+            ? 'Tu sesión expiró. Inicia sesión y vuelve a intentarlo.'
+            : error.status === 403
+              ? 'No tienes permisos para guardar productos.'
+              : undefined;
+          this.mensajeError.set(
+            [acceso ?? mensaje ?? 'No se pudo guardar el producto.', detalleCampos]
+              .filter(Boolean)
+              .join(' ')
+          );
         }
       });
   }
@@ -255,7 +311,8 @@ export class FormularioProductoComponent implements PuedeSalir, OnInit {
 
   private desplazarAlPrimerError(): void {
     setTimeout(() => {
-      const primerError = document.querySelector<HTMLElement>('form .ng-invalid');
+      const primerError =
+        document.querySelector<HTMLElement>('form .ng-invalid');
 
       primerError?.scrollIntoView({
         behavior: 'smooth',

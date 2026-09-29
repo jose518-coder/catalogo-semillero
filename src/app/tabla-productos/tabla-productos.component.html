@@ -13,8 +13,9 @@
       <th mat-header-cell *matHeaderCellDef> Imagen </th>
       <td mat-cell *matCellDef="let producto">
         <img
-          [src]="producto.images[0]"
-          [alt]="producto.title"
+          *ngIf="producto.imagenes.length"
+          [src]="producto.imagenes[0]"
+          [alt]="producto.titulo"
           class="imagen-producto"
         >
       </td>
@@ -22,7 +23,7 @@
  
     <ng-container matColumnDef="titulo">
       <th mat-header-cell *matHeaderCellDef> Título </th>
-      <td mat-cell *matCellDef="let producto"> {{ producto.title }} </td>
+      <td mat-cell *matCellDef="let producto"> {{ producto.titulo }} </td>
     </ng-container>
 
 
@@ -32,13 +33,13 @@
       </th>
 
       <td mat-cell *matCellDef="let producto">
-        {{ producto.category.name }}
+        {{ producto.categoria }}
       </td>
     </ng-container>
 
     <ng-container matColumnDef="precio">
       <th mat-header-cell *matHeaderCellDef> Precio </th>
-      <td mat-cell *matCellDef="let producto"> ${{ producto.price }} </td>
+      <td mat-cell *matCellDef="let producto"> ${{ producto.precio }} </td>
     </ng-container>
   
     <ng-container matColumnDef="acciones">

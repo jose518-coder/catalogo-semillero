@@ -13,7 +13,7 @@ export class CarritoService {
   );
   readonly total = computed(() =>
     this.items().reduce(
-      (suma, producto) => suma + producto.price,
+      (suma, producto) => suma + producto.precio,
       0
     )
   );

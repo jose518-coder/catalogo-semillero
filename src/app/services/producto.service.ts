@@ -1,6 +1,6 @@
 import { Injectable, inject, signal } from '@angular/core';
-import {HttpClient , HttpParams } from '@angular/common/http';
-import {catchError , Observable , of} from 'rxjs';
+import {HttpClient } from '@angular/common/http';
+import {catchError , map, Observable , of} from 'rxjs';
 import { Producto } from '../models/producto';
 import { CrearProducto } from '../models/crear-producto';
 import { ActualizarProducto } from '../models/ActualizarProducto';
@@ -25,30 +25,20 @@ export class ProductoService {
 
     this.error.set(null);
 
-    let params = new HttpParams();
-
-    if (categoryId !== undefined) {
-      params = params.set(
-        'categoryId',
-        categoryId
-      );
-    }
-
-    if (pagina !== undefined) {
-      const limite = 10;
-      const offset =
-        (pagina - 1) * limite;
-      params = params
-        .set('offset', offset)
-        .set('limit', limite);
-    }
-
     return this.http
       .get<Producto[]>(
-        this.apiUrl,
-        { params }
+        this.apiUrl
       )
       .pipe(
+        map(productos => {
+          const filtrados = categoryId === undefined
+            ? productos
+            : productos.filter(producto => producto.categoriaId === categoryId);
+          if (pagina === undefined) return filtrados;
+          const limite = 10;
+          const inicio = (pagina - 1) * limite;
+          return filtrados.slice(inicio, inicio + limite);
+        }),
         catchError(error => {
           console.error(
             'Error al cargar productos',
@@ -91,8 +81,8 @@ export class ProductoService {
 
   eliminar(
     id: number
-  ): Observable<boolean> {
-    return this.http.delete<boolean>(
+  ): Observable<void> {
+    return this.http.delete<void>(
       `${this.apiUrl}/${id}`
     );
   }

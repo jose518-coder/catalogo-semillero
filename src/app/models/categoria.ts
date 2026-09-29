@@ -1,5 +1,6 @@
 export interface Categoria {
   id: number;
   nombre: string;
-  image: string;
+  descripcion: string;
+  cantidadProductos: number;
 }

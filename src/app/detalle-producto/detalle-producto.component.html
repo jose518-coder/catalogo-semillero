@@ -1,11 +1,11 @@
 <div *ngIf="producto$ | async as producto; else cargando">
   <a routerLink="/productos"> ← Volver al catálogo</a>
   <h1> {{ producto.titulo }}</h1>
-  <img [src]="producto.images[0]" [alt]="producto.titulo">
-  <p> {{ producto.description }}</p>
+  <img *ngIf="producto.imagenes.length" [src]="producto.imagenes[0]" [alt]="producto.titulo">
+  <p> {{ producto.descripcion }}</p>
   <p> Precio: ${{ producto.precio }}</p>
-  <p> Categoría: {{ producto.category.name }}</p>
-  <p> Stock: {{ producto.stock }}</p>
+  <p> Categoría: {{ producto.categoria }}</p>
+  <p> Stock: {{ producto.existencias }}</p>
   <hr>
   <h2> Productos relacionados
   </h2>

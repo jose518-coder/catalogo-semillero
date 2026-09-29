@@ -69,7 +69,7 @@ export class AdminProductosComponent {
       {
         width: '400px',
         data: {
-          nombre: producto.title
+          nombre: producto.titulo
         }
       }
     );
