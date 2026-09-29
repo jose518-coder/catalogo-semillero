@@ -18,34 +18,20 @@
         [formGroup]="formulario"
         (ngSubmit)="iniciarSesion()"
       >
-
         <mat-form-field appearance="outline">
-          <mat-label>Correo</mat-label>
-
-          <input
-            matInput
-            type="email"
-            formControlName="correo"
-            autocomplete="email"
-          >
-
-          <mat-error
-            *ngIf="
-              formulario.controls.correo.hasError('required')
-            "
-          >
-            El correo es obligatorio.
-          </mat-error>
-
-          <mat-error
-            *ngIf="
-              formulario.controls.correo.hasError('email')
-            "
-          >
-            Escribe un correo válido.
-          </mat-error>
-        </mat-form-field>
-
+  <mat-label>Nombre de usuario</mat-label>
+    <input
+      matInput
+      type="text"
+      formControlName="usuario"
+      autocomplete="username"
+    >
+    <mat-error
+      *ngIf="
+        formulario.controls.usuario.touched &&
+        formulario.controls.usuario.hasError('required')
+      "
+    > El nombre de usuario es obligatorio. </mat-error> </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Contraseña</mat-label>

@@ -1,6 +1,5 @@
 export interface RegistrarUsuario {
-  name: string;
-  email: string;
-  password: string;
-  avatar: string;
+  usuario: string;
+  contrasena: string;
+  correo: string;
 }
