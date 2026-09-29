@@ -110,7 +110,6 @@ export class AuthService {
       localStorage.removeItem(CLAVE_TOKEN);
       localStorage.removeItem(CLAVE_PERFIL);
     } catch {
-      // El almacenamiento local puede no estar disponible.
     }
 
     this.token.set(null);
@@ -133,7 +132,6 @@ export class AuthService {
     try {
       localStorage.setItem(CLAVE_TOKEN, token);
     } catch {
-      // Se mantiene el estado en memoria.
     }
 
     this.token.set(token);
@@ -146,7 +144,6 @@ export class AuthService {
         JSON.stringify(perfil)
       );
     } catch {
-      // Se mantiene el estado en memoria.
     }
 
     this.perfil.set(perfil);
