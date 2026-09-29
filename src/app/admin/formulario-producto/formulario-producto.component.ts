@@ -170,8 +170,8 @@ export class FormularioProductoComponent implements PuedeSalir, OnInit {
         next: producto => {
           this.formulario.patchValue({
             codigo: producto.id,
-            titulo: producto.title,
-            precio: producto.price,
+            titulo: producto.titulo,
+            precio: producto.precio,
             descripcion: producto.description,
             categoriaId: producto.category.id
           });

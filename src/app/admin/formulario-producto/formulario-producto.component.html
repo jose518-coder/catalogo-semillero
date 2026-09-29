@@ -73,7 +73,7 @@
       <mat-option [value]="0">Seleccione una categoría</mat-option>
 
       <mat-option *ngFor="let categoria of categorias$ | async" [value]="categoria.id">
-        {{ categoria.name }}
+        {{ categoria.nombre }}
       </mat-option>
     </mat-select>
 

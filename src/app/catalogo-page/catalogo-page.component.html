@@ -9,7 +9,7 @@
 <label for="categoria">Categoría:</label>
 <select id="categoria" [value]="categoriaSeleccionada() ?? ''" (change)="cambiarCategoria($event)  ">
   <option value=""> Todas</option>
-  <option *ngFor=" let categoria of categorias$ | async " [value]="categoria.id"> {{ categoria.name }} </option>
+  <option *ngFor=" let categoria of categorias$ | async " [value]="categoria.id"> {{ categoria.nombre }} </option>
 </select>
 <hr>
 <p *ngIf="cargando()"> Cargando productos... </p>
